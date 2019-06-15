@@ -5,7 +5,6 @@
 #include <sys/syscall.h>
 #include "dma.h"
 #include "spi.h"
-#include "display.h"
 #include "tick.h"
 #include "display.h"
 

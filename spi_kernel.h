@@ -1,6 +1,7 @@
 #pragma once
 
 #include "spi.h"
+#include "tick.h"
 
 //#include <inttypes.h>
 //#include <config/sysfs/syscall.h>
