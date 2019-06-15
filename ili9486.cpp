@@ -53,8 +53,8 @@ void InitILI9486()
 #endif
 
   // For sanity, start with both Chip selects high to ensure that the display will see a high->low enable transition when we start.
-  SET_GPIO(GPIO_SPI0_CE0); // Disable Touch
-  SET_GPIO(GPIO_SPI0_CE1); // Disable Display
+  SET_GPIO(GPIO_SPI0_CE1); // Disable Touch
+  SET_GPIO(GPIO_SPI0_CE0); // Disable Display
   usleep(1000);
 
   // Do the initialization with a very low SPI bus speed, so that it will succeed even if the bus speed chosen by the user is too high.
@@ -63,14 +63,14 @@ void InitILI9486()
 
   BEGIN_SPI_COMMUNICATION();
   {
-    CLEAR_GPIO(GPIO_SPI0_CE0); // Enable Touch
-    CLEAR_GPIO(GPIO_SPI0_CE1); // Enable Display
+    CLEAR_GPIO(GPIO_SPI0_CE1); // Enable Touch
+    CLEAR_GPIO(GPIO_SPI0_CE0); // Enable Display
 
     BEGIN_SPI_COMMUNICATION();
 
     usleep(25*1000);
 
-    SET_GPIO(GPIO_SPI0_CE0); // Disable Touch
+    SET_GPIO(GPIO_SPI0_CE1); // Disable Touch
     usleep(25*1000);
 
 #ifdef DISPLAY_SPI_BUS_IS_16BITS_WIDE
