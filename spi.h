@@ -117,3 +117,5 @@ typedef struct __attribute__((packed)) SPITask
 #endif
 
 } SPITask;
+
+void DumpSPICS(uint32_t reg);
