@@ -67,3 +67,4 @@ extern double spiUsecsPerByte;
 
 extern int mem_fd;
 
+extern volatile void *bcm2835;

@@ -9,3 +9,4 @@
 #ifndef USE_DMA_TRANSFERS
 #define VIRT_TO_BUS(ptr) ((uintptr_t)(ptr) | 0xC0000000U)
 #endif
+
