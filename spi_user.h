@@ -34,13 +34,6 @@ typedef struct SPIRegisterFile
 } SPIRegisterFile;
 extern volatile SPIRegisterFile *spi;
 
-// Defines the size of the SPI task memory buffer in bytes. This memory buffer can contain two frames worth of tasks at maximum,
-// so for best performance, should be at least ~DISPLAY_WIDTH*DISPLAY_HEIGHT*BYTES_PER_PIXEL*2 bytes in size, plus some small
-// amount for structuring each SPITask command. Technically this can be something very small, like 4096b, and not need to contain
-// even a single full frame of data, but such small buffers can cause performance issues from threads starving.
-#define SHARED_MEMORY_SIZE (DISPLAY_DRAWABLE_WIDTH*DISPLAY_DRAWABLE_HEIGHT*SPI_BYTESPERPIXEL*3)
-#define SPI_QUEUE_SIZE (SHARED_MEMORY_SIZE - sizeof(SharedMemory))
-
 #if defined(SPI_3WIRE_DATA_COMMAND_FRAMING_BITS) && SPI_3WIRE_DATA_COMMAND_FRAMING_BITS == 1
 // Need a byte of padding for 8-bit -> 9-bit expansion for performance
 #define SPI_9BIT_TASK_PADDING_BYTES 1

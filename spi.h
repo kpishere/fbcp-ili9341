@@ -68,3 +68,10 @@ extern double spiUsecsPerByte;
 extern int mem_fd;
 
 extern volatile void *bcm2835;
+
+// Defines the size of the SPI task memory buffer in bytes. This memory buffer can contain two frames worth of tasks at maximum,
+// so for best performance, should be at least ~DISPLAY_WIDTH*DISPLAY_HEIGHT*BYTES_PER_PIXEL*2 bytes in size, plus some small
+// amount for structuring each SPITask command. Technically this can be something very small, like 4096b, and not need to contain
+// even a single full frame of data, but such small buffers can cause performance issues from threads starving.
+#define SHARED_MEMORY_SIZE (DISPLAY_DRAWABLE_WIDTH*DISPLAY_DRAWABLE_HEIGHT*SPI_BYTESPERPIXEL*3)
+#define SPI_QUEUE_SIZE (SHARED_MEMORY_SIZE - sizeof(SharedMemory))
