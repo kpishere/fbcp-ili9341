@@ -1,5 +1,6 @@
 #pragma once
 
+#include "dma.h"
 #include "spi.h"
 #include "tick.h"
 
