@@ -76,6 +76,7 @@ extern volatile void *bcm2835;
 #define SHARED_MEMORY_SIZE (DISPLAY_DRAWABLE_WIDTH*DISPLAY_DRAWABLE_HEIGHT*SPI_BYTESPERPIXEL*3)
 #define SPI_QUEUE_SIZE (SHARED_MEMORY_SIZE - sizeof(SharedMemory))
 
+#ifndef KERNEL_MODULE
 typedef struct SPIRegisterFile
 {
   uint32_t cs;   // SPI Master Control and Status register
@@ -119,3 +120,4 @@ typedef struct __attribute__((packed)) SPITask
 } SPITask;
 
 void DumpSPICS(uint32_t reg);
+#endif
