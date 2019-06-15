@@ -3,12 +3,43 @@
 #if defined(ILI9486) || defined(ILI9486L)
 
 #include "spi_user.h"
+#include "XPT2046.h"
 
 #include <memory.h>
 #include <stdio.h>
 
+XPT2046 touch;
+static int counter = 0;
+char buffer[20];
+short bufLen = 0;
+#define LOOP_INTERVAL 500
+static int loop = 0;
+
+void ChipSelectHigh()
+{
+  WAIT_SPI_FINISHED();
+  SET_GPIO(GPIO_SPI0_CE1); // Disable Display
+  CLEAR_GPIO(GPIO_SPI0_CE0); // Enable Touch
+  __sync_synchronize();
+    if(loop++ % LOOP_INTERVAL == 0) {
+        touch.read_touchscreen(true);
+        __sync_synchronize();
+    }
+  if(hasInterrupt()) {
+	touch.read_touchscreen(false);
+      __sync_synchronize();
+  }
+  SET_GPIO(GPIO_SPI0_CE0); // Disable Touch
+  CLEAR_GPIO(GPIO_SPI0_CE1); // Enable Display
+  __sync_synchronize();
+}
+
 void InitILI9486()
 {
+
+  // output device
+  touch = XPT2046();
+
   // If a Reset pin is defined, toggle it briefly high->low->high to enable the device. Some devices do not have a reset pin, in which case compile with GPIO_TFT_RESET_PIN left undefined.
 #if defined(GPIO_TFT_RESET_PIN) && GPIO_TFT_RESET_PIN >= 0
   printf("Resetting display at reset GPIO pin %d\n", GPIO_TFT_RESET_PIN);
@@ -21,12 +52,27 @@ void InitILI9486()
   usleep(120 * 1000);
 #endif
 
+  // For sanity, start with both Chip selects high to ensure that the display will see a high->low enable transition when we start.
+  SET_GPIO(GPIO_SPI0_CE0); // Disable Touch
+  SET_GPIO(GPIO_SPI0_CE1); // Disable Display
+  usleep(1000);
+
   // Do the initialization with a very low SPI bus speed, so that it will succeed even if the bus speed chosen by the user is too high.
   spi->clk = 34;
   __sync_synchronize();
 
   BEGIN_SPI_COMMUNICATION();
   {
+    CLEAR_GPIO(GPIO_SPI0_CE0); // Enable Touch
+    CLEAR_GPIO(GPIO_SPI0_CE1); // Enable Display
+
+    BEGIN_SPI_COMMUNICATION();
+
+    usleep(25*1000);
+
+    SET_GPIO(GPIO_SPI0_CE0); // Disable Touch
+    usleep(25*1000);
+
 #ifdef DISPLAY_SPI_BUS_IS_16BITS_WIDE
     SPI_TRANSFER(0xB0/*Interface Mode Control*/, 0x00, 0x00/*DE polarity=High enable, PCKL polarity=data fetched at rising time, HSYNC polarity=Low level sync clock, VSYNC polarity=Low level sync clock*/);
 #else
