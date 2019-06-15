@@ -18,8 +18,8 @@ static int loop = 0;
 void ChipSelectHigh()
 {
   WAIT_SPI_FINISHED();
-  SET_GPIO(GPIO_SPI0_CE1); // Disable Display
-  CLEAR_GPIO(GPIO_SPI0_CE0); // Enable Touch
+  SET_GPIO(GPIO_SPI0_CE0); // Disable Display
+  CLEAR_GPIO(GPIO_SPI0_CE1); // Enable Touch
   __sync_synchronize();
     if(loop++ % LOOP_INTERVAL == 0) {
         touch.read_touchscreen(true);
@@ -29,8 +29,8 @@ void ChipSelectHigh()
 	touch.read_touchscreen(false);
       __sync_synchronize();
   }
-  SET_GPIO(GPIO_SPI0_CE0); // Disable Touch
-  CLEAR_GPIO(GPIO_SPI0_CE1); // Enable Display
+  SET_GPIO(GPIO_SPI0_CE1); // Disable Touch
+  CLEAR_GPIO(GPIO_SPI0_CE0); // Enable Display
   __sync_synchronize();
 }
 
